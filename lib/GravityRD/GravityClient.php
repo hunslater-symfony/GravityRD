@@ -39,7 +39,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0.3';
+	private $version = '1.0.4';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -622,7 +622,7 @@ class GravityItem {
  */
 class GravityRecommendationContext {
 	function __construct() {
-		$this->time = time();
+		$this->recommendationTime = time();
 	}
 
 	/**
