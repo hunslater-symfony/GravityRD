@@ -39,7 +39,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0.7';
+	private $version = '1.0.8';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -111,6 +111,33 @@ class GravityClient {
 		$this->sendRequest('addItems', array('async' => $async), $items, false);
 	}
 
+	/**
+	 * Existing item will be updated. If item does not exist Exception will be thrown.
+	 * Update rules:
+	 *  - Key-value pairs won't be deleted only existing ones updated or new ones added. But If a key occurs in the key
+	 *    value list, then all values with the given key will be deleted and new values added in the recengine.
+	 *  - Hidden field has to be always specified!
+	 *
+	 * @param GravityItem $item The item to update
+	 */
+	public function updateItem(GravityItem $item) {
+		$this->updateItems(array($item));
+	}
+
+	/**
+	 * Existing items will be updated. If item does not exist Exception will be thrown.
+	 * Update rules:
+	 *  - Key-value pairs won't be deleted only existing ones updated or new ones added. But If a key occurs in the key
+	 *    value list, then all values with the given key will be deleted and new values added in the recengine.
+	 *  - Hidden field has to be always specified!
+	 *
+	 * @param GravityItem[] $items The items to update
+	 */
+	public function updateItems(array $items) {
+		$this->sendRequest('updateItems', NULL, $items, false);
+	}
+
+	
 	/**
 	 * Adds user to the recommendation engine.
 	 * If the user already exists with the specified userId,
@@ -191,8 +218,14 @@ class GravityClient {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("X-Gravity-RecEng-ClientVersion: $this->version",'Expect:')); // disable Expect: 100-Continue, it would be an unnecessary roundtrip
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-		curl_setopt($ch, CURLOPT_TIMEOUT, $this->config->timeoutSeconds);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->config->timeoutSeconds);
+		if (is_int($this->config->timeoutSeconds)) {
+			curl_setopt($ch, CURLOPT_TIMEOUT, $this->config->timeoutSeconds);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->config->timeoutSeconds);
+		}
+		else {
+			curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->config->timeoutSeconds*1000);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $this->config->timeoutSeconds*1000);
+		}
 
 		if (strpos($this->config->remoteUrl, 'https') === 0) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->config->verifyPeer);			
@@ -305,6 +338,14 @@ class GravityItemRecommendation {
 	 * @var string
 	 */
 	public $recommendationId;
+	
+	/**
+	 * Array containing additional name-value pairs for recommendations.
+	 * e.g.: AllItemCount for paging responses.
+	 * 
+	 * @var GravityNameValue[]
+	 */
+	public $outputNameValues;
 }
 
 /**
@@ -746,7 +787,7 @@ class GravityClientConfig {
 
 	/**
 	 * The timeout for the operations in seconds. The default value is 3 seconds.
-	 *
+	 * Double values are supported after PHP version  5.2.3 (uses miliseconds timeout)
 	 * @var int
 	 */
 	public $timeoutSeconds;
@@ -891,6 +932,3 @@ class GravityRecEngException {
 	*/
 	public $faultInfo;
 }
-
-
-
