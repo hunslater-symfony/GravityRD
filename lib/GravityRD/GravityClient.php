@@ -39,7 +39,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0.5';
+	private $version = '1.0.6';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -383,9 +383,11 @@ class GravityEvent {
 	 *	</td></tr>
 	 *	<tr><td><code>NEXT_RECOMMENDATION</code></td><td>ADDITIONAL</td><td>The user asked for more recommendation.</td><td></td></tr>
 	 *	<tr><td><code>COMMENT</code></td><td>ADDITIONAL</td><td>The user wrote a comment for the item.</td><td></td></tr>
-	 *	<tr><td><code>CLICK_OUT</code></td><td>PRICE COMPARISON</td><td>The user jumps to an external webshop to buy the product. Used by price comparison sites.</td><td></td></tr>
+	 *	<tr><td><code>NOT_INTERESTED</code></td><td>ADDITIONAL</td><td>The user would not like this item and similar items to be recommended to him, but he also does not want to give a negative rating for this item.</td><td></td></tr>
+	 *	<tr><td><code>LETTER_READ</code></td><td>ADDITIONAL</td><td>T The user read a letter which sent for him by the system (eg. a newsletter).</td><td></td></tr>
+ 	 *	<tr><td><code>CLICK_OUT</code></td><td>PRICE COMPARISON</td><td>The user jumps to an external webshop to buy the product. Used by price comparison sites.</td><td></td></tr>
 	 *	<tr><td><code>LANCE</code></td><td>AUCTION</td><td>The user place a bid on the item.</td><td><code>Value</code>The value of the bid as a decimal number.</td></tr>
-	 *	<tr><td><code>LETTER_SEND</code></td><td>ADVERTISING</td><td>The user sent a message to the advertiser.</td><td></td></tr>
+	 *	<tr><td><code>LETTER_SEND</code></td><td>AUCTION, ADVERTISING</td><td>The user sent a message to the advertiser.</td><td></td></tr>
 	 *	<tr><td><code>ADD_ITEM</code></td><td>AUCTION, ADVERTISING</td><td>The user added an item to the site.</td><td></td></tr>
 	 *	<tr><td><code>DELETE_ITEM</code></td><td>AUCTION, ADVERTISING</td><td>The user deleted an item from the site.</td><td></td></tr>
 	 *	<tr><td><code>FREE_VIEW</code></td><td>MEDIA</td><td>The user wached/listened an item for free.</td><td><code>Duration</code>How long the user wached the item in seconds as a decimal number.</td></tr>
@@ -395,6 +397,14 @@ class GravityEvent {
 	 *			<tr><td><code>Value</code></td><td>How much the user payed for waching the item. A decimal number.</td></tr>
 	 *		</table>
 	 *  </td></tr>
+	 *	<tr><td><code>SUBSCRIPTION_VIEW</code></td><td>MEDIA</td><td>The user watched an item that was available for him by a subscription.</td><td>
+	 *      <table>
+	 *			<tr><td><code>Duration</code></td><td>How long the user wached the item in seconds. A decimal number.</td></tr>
+	 *		</table>
+	 *  </td></tr>
+	 *	<tr><td><code>FOLLOW_USER</code></td><td>SOCIAL</td><td>The user follows an other user.</td><td><code>OtherUserId</code>The identifier of the followed user.</td></tr>
+	 *	<tr><td><code>SHARE</code></td><td>SOCIAL</td><td>The user share the item on a social site (eg. Facebook, Twitter,...).</td><td></td></tr>
+	 *	<tr><td><code>REDEEM</code></td><td>COUPON</td><td>The user redeem the item (eg. a coupon).</td><td></td></tr>
 	 * </table>
 	 *
 	 * @var string
