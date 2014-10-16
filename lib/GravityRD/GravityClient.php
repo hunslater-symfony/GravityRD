@@ -39,7 +39,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0.4';
+	private $version = '1.0.5';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -174,7 +174,7 @@ class GravityClient {
 	 * Simple test function to test throwing an exception.
 	 */
 	public function testException() {
-		$this->sendRequest('testExceptionn', null, null, true);
+		$this->sendRequest('testException', null, null, true);
 	}
 
 	private function getRequestQueryString($methodName, $queryStringParams) {
@@ -249,7 +249,7 @@ class GravityClient {
 				$e = json_decode($result, false);
 				$supplement = "";
 				if (is_object($e)) {
-					$supplement = ", Message: $e->message, RecEngErrorCode: $e->recEngErrorCode";
+					$supplement = ", Message: $e->message";
 				}
 				throw new GravityException(
 				"Non-200 HTTP response code: $responseCode $supplement",
@@ -590,16 +590,21 @@ class GravityItem {
 	 *	<tr><th>Name</th><th>Localizable</th><th>Description</th></tr>
 	 *	<tr><td>Title</td><td>Yes</td><td>The title of the item.</td></tr>
 	 *	<tr><td>Description</td><td>Yes</td><td>The description of item.</td></tr>
-	 *	<tr><td>CategoryId</td><td>No</td><td>The category of the item. Can be used multiple times to describe multiple or hierarchical categories.<br/>
-	 *		For example, for a book in the category "Computer books" and subcategory "Database" the following can be provided:<br/>
+	 *	<tr><td>CategoryId</td><td>No</td><td>The category of the item. Can be used multiple times to describe multiple categories.<br/>
+	 *		For example, for a book in the category "Computer books" and also in the category "Science books" the following can be provided:<br/>
 	 *		<ul>
-	 *			<li><code>{Name='Category', Value='1'}</code> // The identifier of "Computer books" category.</li>
-	 *			<li><code>{Name='Category', Value='2'}</code> // The identifier of "Computer books &gt; Database" subcategory.</li>
+	 *			<li><code>{Name="Category", Value="1"}</code> // The identifier of "Computer books" category.</li>
+	 *			<li><code>{Name="Category", Value="2"}</code> // The identifier of "Science books" category.</li>
 	 *		</ul>
-	 *		So the name 'Category' is used multiple times.
+	 *		So the name 'Category' is used multiple times. In this example, the "Science books" category is not the subcategory of the "Computer books" category, and vica versa.<br/>
+	 *		To describe a hierarchical categorization, please send the hierarchy of the categories in one name-value pair (the values should be separated by a delimiter, eg. '|'). <br/>
+	 *		For example, for a book in the category "Computer books" and in the subcategory "Database" the following can be provided:<br/>
+	 *		<ul>
+	 *			<li><code>{Name="Category", Value="1|3"}</code> // "1" : The identifier of "Computer books" category. "3" : The identifier of "Database" category.</li>
+	 *		</ul>
 	 *		Later it is possible to use the recommendation engine to filter the list of items based on category, so it can provide recommendations for "Computer Books" category or only for "Computer Books &gt; Database" category.
 	 *  </td></tr>
-	 *	<tr><td>Tags</td><td>No</td><td>Tags for the item. Specifiy a separate namevalue for each tag.</td></tr>
+	 *	<tr><td>Tags</td><td>No</td><td>Tags for the item. Specify a separate namevalue for each tag.</td></tr>
 	 *	<tr><td>State</td><td>No</td><td>The state of the item, for example 'available', 'out of stock' etc.</td></tr>
 	 *	<tr><td>Price</td><td>No</td><td>The price of the item.</td></tr>
 	 * </table>
@@ -884,7 +889,7 @@ class GravityRecEngException {
 	 *
 	 * @var string
 	*/
-	public $recEngErrorCode;
+	public $faultInfo;
 }
 
 
