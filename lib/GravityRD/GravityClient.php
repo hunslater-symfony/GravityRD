@@ -19,6 +19,7 @@
  *			$config->remoteUrl = 'https://saas.gravityrd.com/grrec-CustomerID-war/WebshopServlet';
  *			$config->user = 'sampleUser';
  *			$config->password = 'samplePasswd';
+ *			$config->retry = 3
  *			return new GravityClient($config);
  *		}
  *		$client = createGravityClient();
@@ -39,7 +40,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0.8';
+	private $version = '1.0.9';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -213,6 +214,12 @@ class GravityClient {
 	}
 
 	private function sendRequest($methodName, $queryStringParams, $requestBody, $hasAnswer) {
+		// get the # of retries
+		$retry = 0;
+		if(isset($this->config->retry) && is_int($this->config->retry)) {
+			$retry = $this->config->retry;
+		}
+		
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->config->remoteUrl . "/" . $methodName . $this->getRequestQueryString($methodName, $queryStringParams));
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("X-Gravity-RecEng-ClientVersion: $this->version",'Expect:')); // disable Expect: 100-Continue, it would be an unnecessary roundtrip
@@ -240,8 +247,18 @@ class GravityClient {
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestBody));
 		}
-
+		
 		$result = curl_exec($ch);
+		
+		$retryEnabled = in_array($methodName, array("addUsers", "addItems"));
+
+		if($retryEnabled && curl_errno($ch) == 28){
+			while($retry > 0 && curl_errno($ch) == 28){
+				curl_exec($ch);
+				$retry--;
+			}
+		}
+		
 		$rc = $this->handleError($ch, $result);
 		if (is_resource($ch)) {
 			curl_close($ch);
