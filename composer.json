@@ -1,8 +1,11 @@
 {
     "name": "hunslater/gravity-rd",
+    "type": "library",
     "description": "Gravity R&D - PHP Client",
     "keywords": ["tracking", "analitycs" , "recommendation" ],
     "homepage": "https://developers.gravityrd.com/display/DEV/PHP",
+    "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Bozsányi Ádám",
