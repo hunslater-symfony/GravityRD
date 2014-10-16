@@ -39,7 +39,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0.2';
+	private $version = '1.0.3';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -130,7 +130,7 @@ class GravityClient {
 	 * If a user already exists with the specified userId,
 	 * the entire user will be replaced with the new user specified here.
 	 *
-	 * @param GravityUser[] <var>$users</var>
+	 * @param GravityUser[] <var>$users</var> The users to add.
 	 * @param boolean <var>$async</var> true if the call is asynchronous. An asynchronous call
 	 * returns immediately after an input data checking,
 	 * a synchronous call returns only after the data is saved to database.
@@ -382,8 +382,12 @@ class GravityEvent {
 	 *		</table>
 	 *	</td></tr>
 	 *	<tr><td><code>NEXT_RECOMMENDATION</code></td><td>ADDITIONAL</td><td>The user asked for more recommendation.</td><td></td></tr>
+	 *	<tr><td><code>COMMENT</code></td><td>ADDITIONAL</td><td>The user wrote a comment for the item.</td><td></td></tr>
 	 *	<tr><td><code>CLICK_OUT</code></td><td>PRICE COMPARISON</td><td>The user jumps to an external webshop to buy the product. Used by price comparison sites.</td><td></td></tr>
 	 *	<tr><td><code>LANCE</code></td><td>AUCTION</td><td>The user place a bid on the item.</td><td><code>Value</code>The value of the bid as a decimal number.</td></tr>
+	 *	<tr><td><code>LETTER_SEND</code></td><td>ADVERTISING</td><td>The user sent a message to the advertiser.</td><td></td></tr>
+	 *	<tr><td><code>ADD_ITEM</code></td><td>AUCTION, ADVERTISING</td><td>The user added an item to the site.</td><td></td></tr>
+	 *	<tr><td><code>DELETE_ITEM</code></td><td>AUCTION, ADVERTISING</td><td>The user deleted an item from the site.</td><td></td></tr>
 	 *	<tr><td><code>FREE_VIEW</code></td><td>MEDIA</td><td>The user wached/listened an item for free.</td><td><code>Duration</code>How long the user wached the item in seconds as a decimal number.</td></tr>
 	 *	<tr><td><code>PAID_VIEW</code></td><td>MEDIA</td><td>The user payed for waching/listening an item.</td><td>
 	 *      <table>
@@ -391,7 +395,6 @@ class GravityEvent {
 	 *			<tr><td><code>Value</code></td><td>How much the user payed for waching the item. A decimal number.</td></tr>
 	 *		</table>
 	 *  </td></tr>
-	 *	<tr><td><code>LETTER_SEND</code></td><td>ADVERTISING</td><td>The user sent a message to the advertiser.</td><td></td></tr>
 	 * </table>
 	 *
 	 * @var string
