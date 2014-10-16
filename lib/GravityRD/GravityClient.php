@@ -13,32 +13,25 @@
  *
  * Example usage:
  * 
- * <code>
+ * <pre>
  *		function createGravityClient() {
- *
  *			$config = new GravityClientConfig();
- *
- *			$config->remoteUrl = 'https://saas.gravityrd.com/WebshopServletTest/WebshopServlet';
- *
+ *			$config->remoteUrl = 'https://saas.gravityrd.com/grrec-CustomerID-war/WebshopServlet';
  *			$config->user = 'sampleUser';
- *
  *			$config->password = 'samplePasswd';
- *
  *			return new GravityClient($config);
- *
  *		}
- *
  *		$client = createGravityClient();
- *
  *		$context = new GravityRecommendationContext();
+ *		$context->numberLimit = 5;
+ *		$context->scenarioId = 'HOMEPAGE_MAIN';
+ *		$client->getItemRecommendation('user1', '123456789abcdef', $context);
+ * </pre>
  *
- *		$context->numberLimit = 10;
+ * Please do not modify the GravityClient.php file (e.g. do not write your configuration parameters into the GravityClient.php file).
+ * Using an unmodified client makes version updates easier.
+ * Use your own factory function (like createGravityClient in the example above) to pass your configuration information to the GravityClient constructor.
  * 
- *		$client->getItemRecommendation('user1', null, new GravityRecommendationContext());
- * </code>
- *
- * Please do not modify the client (eg: don't write your configuration parameters into the client).
- * Using an unmodified client the version updates are easier.
  */
 
 class GravityClient {
@@ -46,7 +39,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0';
+	private $version = '1.0.1';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -93,7 +86,7 @@ class GravityClient {
 	/**
 	 * Adds an item to the recommendation engine.
 	 * If the item already exists with the specified itemId,
-     * the entire item along with its KeyValue pairs will be replaced to the new item specified here.
+     * the entire item along with its NameValue pairs will be replaced to the new item specified here.
 	 *
 	 * @param GravityItem <var>$item</var> The item to add
 	 * @param boolean <var>$async</var> true if the call is asynchronous. An asynchronous call
@@ -107,7 +100,7 @@ class GravityClient {
 	/**
 	 * Adds items to the recommendation engine.
  	 * If an item already exists with the specified itemId,
-     * the entire item along with its KeyValue pairs will be replaced to the new item specified here.
+     * the entire item along with its NameValue pairs will be replaced to the new item specified here.
 	 *
 	 * @param GravityItem[] <var>$items</var> The items to add
 	 * @param boolean <var>$async</var> true if the call is asynchronous. An asynchronous call
@@ -195,7 +188,7 @@ class GravityClient {
 	private function sendRequest($methodName, $queryStringParams, $requestBody, $hasAnswer) {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->config->remoteUrl . "/" . $methodName . $this->getRequestQueryString($methodName, $queryStringParams));
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Gravity-RecEng-WebShop-Client-Version: $this->version",'Expect:')); // disable Expect: 100-Continue, it would be an unnecessary roundtrip
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array("X-Gravity-RecEng-ClientVersion: $this->version",'Expect:')); // disable Expect: 100-Continue, it would be an unnecessary roundtrip
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 		curl_setopt($ch, CURLOPT_TIMEOUT, $this->config->timeoutSeconds);
