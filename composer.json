@@ -1,0 +1,21 @@
+{
+    "name": "hunslater/gravity-rd",
+    "description": "Gravity R&D - PHP Client",
+    "keywords": ["tracking", "analitycs" , "recommendation" ],
+    "homepage": "https://developers.gravityrd.com/display/DEV/PHP",
+    "authors": [
+        {
+            "name": "Bozsányi Ádám",
+            "email": "hunslater@gmail.com"
+        }
+    ],
+    "require": {
+      "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-0" : {
+            "GravityRD_" : "lib/"
+        }
+    },
+
+}
