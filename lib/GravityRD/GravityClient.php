@@ -39,7 +39,7 @@ class GravityClient {
 	/**
 	 * The version info of the client.
 	 */
-	private $version = '1.0.6';
+	private $version = '1.0.7';
 
 	/**
 	 * Creates a new client instance with the specified configuration
@@ -389,7 +389,6 @@ class GravityEvent {
 	 *	<tr><td><code>LANCE</code></td><td>AUCTION</td><td>The user place a bid on the item.</td><td><code>Value</code>The value of the bid as a decimal number.</td></tr>
 	 *	<tr><td><code>LETTER_SEND</code></td><td>AUCTION, ADVERTISING</td><td>The user sent a message to the advertiser.</td><td></td></tr>
 	 *	<tr><td><code>ADD_ITEM</code></td><td>AUCTION, ADVERTISING</td><td>The user added an item to the site.</td><td></td></tr>
-	 *	<tr><td><code>DELETE_ITEM</code></td><td>AUCTION, ADVERTISING</td><td>The user deleted an item from the site.</td><td></td></tr>
 	 *	<tr><td><code>FREE_VIEW</code></td><td>MEDIA</td><td>The user wached/listened an item for free.</td><td><code>Duration</code>How long the user wached the item in seconds as a decimal number.</td></tr>
 	 *	<tr><td><code>PAID_VIEW</code></td><td>MEDIA</td><td>The user payed for waching/listening an item.</td><td>
 	 *      <table>
@@ -600,18 +599,9 @@ class GravityItem {
 	 *	<tr><th>Name</th><th>Localizable</th><th>Description</th></tr>
 	 *	<tr><td>Title</td><td>Yes</td><td>The title of the item.</td></tr>
 	 *	<tr><td>Description</td><td>Yes</td><td>The description of item.</td></tr>
-	 *	<tr><td>CategoryId</td><td>No</td><td>The category of the item. Can be used multiple times to describe multiple categories.<br/>
-	 *		For example, for a book in the category "Computer books" and also in the category "Science books" the following can be provided:<br/>
-	 *		<ul>
-	 *			<li><code>{Name="Category", Value="1"}</code> // The identifier of "Computer books" category.</li>
-	 *			<li><code>{Name="Category", Value="2"}</code> // The identifier of "Science books" category.</li>
-	 *		</ul>
-	 *		So the name 'Category' is used multiple times. In this example, the "Science books" category is not the subcategory of the "Computer books" category, and vica versa.<br/>
-	 *		To describe a hierarchical categorization, please send the hierarchy of the categories in one name-value pair (the values should be separated by a delimiter, eg. '|'). <br/>
-	 *		For example, for a book in the category "Computer books" and in the subcategory "Database" the following can be provided:<br/>
-	 *		<ul>
-	 *			<li><code>{Name="Category", Value="1|3"}</code> // "1" : The identifier of "Computer books" category. "3" : The identifier of "Database" category.</li>
-	 *		</ul>
+	 *	<tr><td>CategoryPath</td><td>No</td><td>The full path of the item's category.
+	 *		For example, CategoryPath might be "books/computers/databases" for a book about databases.
+	 *		CategoryPath can be repeated if an item belongs to multiple categories. Use "/" only for separating levels.
 	 *		Later it is possible to use the recommendation engine to filter the list of items based on category, so it can provide recommendations for "Computer Books" category or only for "Computer Books &gt; Database" category.
 	 *  </td></tr>
 	 *	<tr><td>Tags</td><td>No</td><td>Tags for the item. Specify a separate namevalue for each tag.</td></tr>
